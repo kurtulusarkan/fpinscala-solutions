@@ -28,12 +28,9 @@ object chapter4 {
     }
 
   def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
-    a match {
-      case None => None
-      case Some(x) => b match {
-        case None => None
-        case Some(y) => Some(f(x, y))
-      }
+    (a,b) match {
+      case (Some(x), Some(y)) => Some(f(x,y))
+      case _ => None
     }
   }
 
@@ -66,7 +63,7 @@ object chapter4 {
     val optAge = Try(age.toInt)
     val optTickets = Try(numberOfSpeedTickets.toInt)
 
-    map2_2(optAge, optTickets)(insuranceRateQuote)
+    map2(optAge, optTickets)(insuranceRateQuote)
   }
 
   def main(args: Array[String]): Unit = {
