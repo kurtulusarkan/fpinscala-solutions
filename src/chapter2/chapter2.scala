@@ -53,7 +53,7 @@ object chapter2 {
   def curry[A, B, C](f: (A, B) => C): A => (B => C) =
     (a: A) => (b: B) => f(a, b)
 
-  def uncurry[A, B, C](f: A => B => C): (A, B) => C =
+  def unCurry[A, B, C](f: A => B => C): (A, B) => C =
     (a: A, b: B) => f(a)(b)
 
   def compose[A, B, C](f: B => C, g: A => B): A => C =
@@ -74,12 +74,12 @@ object chapter2 {
 
     val partialSum = partial1(5, sum)
     val curriedSum = curry(sum)
-    val unCurryedSum = uncurry(curriedSum)
+    val unCurrySum = unCurry(curriedSum)
     val composed = compose((x: Int) => x + x, (y: Int) => y * y)
 
     println("partialSum: " + partialSum(5))
     println("curriedSum: " + curriedSum(5)(5))
-    println("unCurryedSum: " + unCurryedSum(5, 5))
+    println("unCurrySum: " + unCurrySum(5, 5))
     println("composed: " + composed(5))
   }
 }
