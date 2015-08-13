@@ -28,14 +28,14 @@ object chapter4 {
     }
 
   def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
-    (a,b) match {
-      case (Some(x), Some(y)) => Some(f(x,y))
+    (a, b) match {
+      case (Some(x), Some(y)) => Some(f(x, y))
       case _ => None
     }
   }
 
   def map2_2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
-    a flatMap( aa => b map( bb => f(aa,bb) ))
+    a flatMap (aa => b map (bb => f(aa, bb)))
 
   def map2_3[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
     for {
@@ -47,12 +47,12 @@ object chapter4 {
   def sequence[A](a: List[Option[A]]): Option[List[A]] = {
     a match {
       case Nil => Some(Nil)
-      case h :: t => h flatMap(hh => sequence(t) map (hh :: _))
+      case h :: t => h flatMap (hh => sequence(t) map (hh :: _))
     }
   }
 
   def sequence_2[A](a: List[Option[A]]): Option[List[A]] =
-    a.foldRight[Option[List[A]]](Some(Nil))((x,y) => map2(x,y)(_ :: _))
+    a.foldRight[Option[List[A]]](Some(Nil))((x, y) => map2(x, y)(_ :: _))
 
   def insuranceRateQuote(age: Int, numberOfSpeedTickets: Int): Double = {
     age * numberOfSpeedTickets * 2.0
@@ -66,10 +66,32 @@ object chapter4 {
     map2(optAge, optTickets)(insuranceRateQuote)
   }
 
+  //---------------------
+
+  def testFun4(a: Int, b: String, c: Double, d: Int): String = {
+    s"$a a, $b b, $c c, $d d"
+  }
+
+  def map4[A, B, C, D, E](a: Option[A], b: Option[B], c: Option[C], d: Option[D])(f: (A, B, C, D) => E): Option[E] = {
+    for {
+      aa <- a
+      bb <- b
+      cc <- c
+      dd <- d
+    } yield f(aa, bb, cc, dd)
+  }
+
+  def testFun4map4(): Option[String] = {
+    map4(Some(4), Some("String"), Some(5.5), Some(3))(testFun4)
+  }
+
+  //---------
+
   def main(args: Array[String]): Unit = {
 
     println("Variance: " + variance(List(3, 4, 3, 4, 3, 4, 3, 4, 3)))
     println("absOption: " + absOption(Some(-45.3)))
+    println("testFun4map4: " + testFun4map4())
     println("parseInsuranceRateQuote: " + parseInsuranceRateQuote("asdf", "asdf"))
     println("parseInsuranceRateQuote: " + parseInsuranceRateQuote("123", "123"))
   }
