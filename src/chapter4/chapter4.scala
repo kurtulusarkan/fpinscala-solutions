@@ -64,6 +64,26 @@ object chapter4 {
     }
   }
 
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = {
+    sequence(a map f)
+  }
+
+  def traverse_2[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = {
+
+    a.foldRight[Option[List[B]]](Some(Nil))((x, y) => map2(f(x), y)(_ :: _))
+  }
+
+  def traverse_3[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+    a match {
+      case Nil => Some(Nil)
+      case h :: t => map2(f(h), traverse(t)(f))(_ :: _)
+    }
+
+  def sequence_4[A](a: List[Option[A]]): Option[List[A]] =
+    traverse_3(a)(x => x)
+
+  // ---------------
+
   def insuranceRateQuote(age: Int, numberOfSpeedTickets: Int): Double = {
     age * numberOfSpeedTickets * 2.0
   }
@@ -99,7 +119,7 @@ object chapter4 {
 
   def main(args: Array[String]): Unit = {
 
-    println(sequence_3(List(Some(2), Some(3), Some(4))))
+    println(sequence_4(List(Some(2), Some(3), Some(4))))
 
     println("Variance: " + variance(List(3, 4, 3, 4, 3, 4, 3, 4, 3)))
     println("absOption: " + absOption(Some(-45.3)))
