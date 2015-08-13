@@ -115,7 +115,39 @@ object chapter4 {
     map4(Some(4), Some("String"), Some(5.5), Some(3))(testFun4)
   }
 
-  //---------
+  //------------------------------------------------------------------
+  // Either
+  //------------------------------------------------------------------
+
+  def mean1(xs: IndexedSeq[Double]): Either[String, Double] = {
+    if (xs.isEmpty)
+      Left("Mean of empty list")
+    else
+      Right(xs.sum / xs.length)
+  }
+
+  def Try1[A](a: => A): Either[Exception, A] =
+    try Right(a)
+    catch {
+      case e: Exception => Left(e)
+    }
+
+  def safeDiv(x: Int, y: Int): Either[Exception, Int] =
+    Try1(x / y)
+
+  def parseInsuranceRateQuote1(age: String, numberOfSpeedingTickets: String): Either[Exception, Double] =
+    for {
+      a <- Try1( age.toInt )
+      tickets <- Try1 { numberOfSpeedingTickets.toInt }
+    } yield insuranceRateQuote(a, tickets)
+
+  def sequence1[E, A](es: List[Either[E, A]]): Either[E, List[A]] = {
+
+  }
+
+  def traverse1[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] = {
+
+  }
 
   def main(args: Array[String]): Unit = {
 
@@ -124,7 +156,12 @@ object chapter4 {
     println("Variance: " + variance(List(3, 4, 3, 4, 3, 4, 3, 4, 3)))
     println("absOption: " + absOption(Some(-45.3)))
     println("testFun4map4: " + testFun4map4())
-    println("parseInsuranceRateQuote: " + parseInsuranceRateQuote("asdf", "asdf"))
+    println("parseInsuranceRateQuote: " + parseInsuranceRateQuote("test", "test"))
     println("parseInsuranceRateQuote: " + parseInsuranceRateQuote("123", "123"))
+    println("parseInsuranceRateQuote1: " + parseInsuranceRateQuote1("test1", "123"))
+    println("parseInsuranceRateQuote1: " + parseInsuranceRateQuote1("test1", "test2"))
+    println("parseInsuranceRateQuote1: " + parseInsuranceRateQuote1("123", "123"))
+
+    println("mean1: " + mean1(Vector(3.0, 4.0, 5.0, 6.0, 7.0, 8.0)))
   }
 }
