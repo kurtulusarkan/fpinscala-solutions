@@ -54,6 +54,16 @@ object chapter4 {
   def sequence_2[A](a: List[Option[A]]): Option[List[A]] =
     a.foldRight[Option[List[A]]](Some(Nil))((x, y) => map2(x, y)(_ :: _))
 
+  def sequence_3[A](a: List[Option[A]]): Option[List[A]] = {
+    a match {
+      case Nil => Some(Nil)
+      case x :: xs => for {
+        xx <- x
+        yy <- sequence_3(xs)
+      } yield xx :: yy
+    }
+  }
+
   def insuranceRateQuote(age: Int, numberOfSpeedTickets: Int): Double = {
     age * numberOfSpeedTickets * 2.0
   }
@@ -88,6 +98,8 @@ object chapter4 {
   //---------
 
   def main(args: Array[String]): Unit = {
+
+    println(sequence_3(List(Some(2), Some(3), Some(4))))
 
     println("Variance: " + variance(List(3, 4, 3, 4, 3, 4, 3, 4, 3)))
     println("absOption: " + absOption(Some(-45.3)))
