@@ -46,6 +46,14 @@ sealed trait Stream[+A] {
     }
   }
 
+  @tailrec
+  final def dropWhile(p: A => Boolean): Stream[A] = {
+    this match {
+      case Cons(x, xs) if p(x()) => xs().dropWhile(p)
+      case _ => this
+    }
+  }
+
   def take(n: Int): Stream[A] = {
     this match {
       case Cons(x, xs) if n > 1 => Stream.cons(x(), xs().take(n - 1))
