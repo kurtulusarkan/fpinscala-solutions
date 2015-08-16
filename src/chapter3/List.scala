@@ -78,11 +78,9 @@ object List {
     foldLeft(s, Nil: List[A])(append)
   }
 
-  /*
-  def apply[A](as: A*): List[A] =
+  def apply_1[A](as: A*): List[A] =
     if (as.isEmpty) Nil
-    else Cons(as.head, apply(as.tail: _*))
-  */
+    else Cons(as.head, apply_1(as.tail: _*))
 
   def apply[A](as: A*): List[A] = {
 

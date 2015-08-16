@@ -9,19 +9,29 @@ sealed trait Stream[+A] {
     case Cons(x, _) => Some(x())
   }
 
+  def tail: Option[Stream[A]] = this match {
+    case Empty => None
+    case Cons(x, y) => Some(y())
+  }
+
   def toList: List[A] = {
+
+    // for head, tail traces
+    println("----- toList")
+
     @tailrec
-    def loop(s: Stream[A], acc:List[A]): List[A] = s match {
+    def loop(s: Stream[A], acc: List[A]): List[A] = s match {
       case Cons(x, xs) => loop(xs(), x() :: acc)
       case _ => acc
     }
+
     loop(this, List()).reverse
   }
 
   def toList_1: List[A] = {
     this match {
       case Empty => Nil
-      case Cons(x, xs) => x() :: xs().toList
+      case Cons(x, xs) => x() :: xs().toList_1
     }
   }
 
@@ -30,7 +40,7 @@ sealed trait Stream[+A] {
     val buf = new collection.mutable.ListBuffer[A]
     @tailrec
     def go(s: Stream[A]): List[A] = s match {
-      case Cons(h,t) =>
+      case Cons(h, t) =>
         buf += h()
         go(t())
       case _ => buf.toList
@@ -68,6 +78,26 @@ sealed trait Stream[+A] {
       case _ => Stream.empty
     }
   }
+
+  @tailrec
+  final def exists(p: A => Boolean): Boolean = this match {
+    case Cons(x, xs) => p(x()) || xs().exists(p)
+    case _ => false
+  }
+
+  def foldRight[B](z: => B)(f: (A, => B) => B): B = {
+    this match {
+      case Cons(x, xs) => f(x(), xs().foldRight(z)(f))
+      case _ => z
+    }
+  }
+
+  def exists_1(p: A => Boolean): Boolean =
+    foldRight(false)((x, y) => p(x) || y)
+
+  def forAll(p: A => Boolean): Boolean =
+    foldRight(true)((x, y) => p(x) && y)
+
 }
 
 case object Empty extends Stream[Nothing]
@@ -79,14 +109,36 @@ object Stream {
   def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = {
     lazy val head = hd
     lazy val tail = tl
-    Cons(() => head, () => tail)
+
+    // trace access
+    Cons(() => {
+      println("head")
+      head
+    }, () => {
+      println("tail")
+      tail
+    })
   }
 
   def empty[A]: Stream[A] = Empty
 
-  def apply[A](as: A*): Stream[A] =
+  def apply_1[A](as: A*): Stream[A] =
     if (as.isEmpty)
       empty
     else
-      cons(as.head, apply(as.tail: _*))
+      cons(as.head, apply_1(as.tail: _*))
+
+  def apply[A](as: A*): Stream[A] = {
+
+    if (as.isEmpty)
+      return empty
+
+    @tailrec
+    def loop(n: Int, acc: Stream[A]): Stream[A] = {
+      if (n == 0) acc
+      else loop(n - 1, cons(as(n - 1), acc))
+    }
+
+    loop(as.length - 1, cons(as(as.length - 1), empty))
+  }
 }
