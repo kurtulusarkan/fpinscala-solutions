@@ -46,11 +46,10 @@ object Either {
     _ map f
 
   // this one takes cares of possible exception that can occurs in f
-  def lift_1[A, B](f: A => B): Either[Exception, A] => Either[Exception, B] =
-    (a: Either[Exception, A]) => a match {
-      case Left(x) => Left(x)
-      case Right(x) => Try(f(x))
-    }
+  def lift_1[A, B](f: A => B): Either[Exception, A] => Either[Exception, B] = {
+    case Left(x) => Left(x)
+    case Right(x) => Try(f(x))
+  }
 
   def Try[A](a: => A): Either[Exception, A] =
     try Right(a)
