@@ -36,6 +36,8 @@ object chapter5 {
     println()
     println("head: " + stream.head)
     println()
+    println("head_1: " + stream.head_1)
+    println()
     println("tail: " + stream.tail)
     println()
     println("tail: " + Stream.empty)
@@ -53,6 +55,8 @@ object chapter5 {
     println()
     println("takeWhile: " + Stream(1, 2, 3, 4, 5).takeWhile(_ < 3).toList)
     println()
+    println("takeWhile_1: " + Stream(1, 2, 3, 4, 5).takeWhile_1(_ < 3).toList)
+    println()
 
     println("exists: " + Stream(1, 2, 3, 4, 5).exists(_ == 20))
     println()
@@ -62,6 +66,18 @@ object chapter5 {
     println("forAll: " + Stream(1, 2, 3, 4, 5).forAll(_ > 0))
     println()
     println("forAll: " + Stream(1, 2, 3, 4, 5).forAll(_ > 2))
+    println()
+
+    println("map.filter: " + Stream(1, 2, 3, 4).map(_ + 10).filter(_ % 2 == 0).toList)
+    println()
+
+    println("ones_1: " + Stream.ones_1.map(_ + 1).exists(_ % 2 == 0))
+
+    println("constant_2: " + Stream.constant_2(5).take(5).toList)
+
+    println("constant_2: " + Stream.from_2(5).take(5).toList)
+
+    println("fibs_2: " + Stream.fibs_2().takeWhile(_ < Int.MaxValue / 2).toList)
     println()
   }
 }
