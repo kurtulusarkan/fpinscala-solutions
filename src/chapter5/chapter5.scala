@@ -45,6 +45,8 @@ object chapter5 {
 
     println("toList: " + stream.toList)
     println()
+    println("toList: " + stream.toList) // to check if the stream caches it's values.
+    println()
 
     println("drop: " + Stream(1, 2, 3, 4, 5).drop(2).toList)
     println()
@@ -72,12 +74,37 @@ object chapter5 {
     println()
 
     println("ones_1: " + Stream.ones_1.map(_ + 1).exists(_ % 2 == 0))
-
+    println()
     println("constant_2: " + Stream.constant_2(5).take(5).toList)
-
+    println()
     println("constant_2: " + Stream.from_2(5).take(5).toList)
-
+    println()
     println("fibs_2: " + Stream.fibs_2().takeWhile(_ < Int.MaxValue / 2).toList)
+    println()
+
+    println("zipWith: " + Stream(1, 2, 3, 4, 5).zipWith(Stream(5, 4, 3, 2, 1))((a, b) => a + b).toList)
+    println()
+
+    println("zip: " + Stream(1, 2, 3, 4, 5).zip(Stream(5, 4, 3, 2, 1)).toList)
+    println()
+
+    println("zipWithAll: " + Stream(1, 2, 3, 4, 5).zipWithAll(Stream(5, 4, 3, 2, 1, 0, -1))((a, b) => a flatMap (aa => b map (bb => aa + bb))).toList)
+    println()
+
+    println("zipAll: " + Stream(1, 2, 3, 4, 5).zipAll(Stream(5, 4, 3, 2, 1, 0, -1)).toList)
+    println()
+
+    println("startsWith: " + Stream(1, 2, 3, 4, 5).startsWith_1(Stream(1, 2, 3)))
+    println()
+    println("startsWith: " + Stream(1, 2, 3, 4, 5).startsWith_1(Stream(2, 2, 3)))
+    println()
+
+    println("hasSubSequence: " + Stream(1, 2, 3, 4, 5).hasSubSequence(Stream(2, 3)))
+    println()
+    println("hasSubSequence: " + Stream(1, 2, 3, 4, 5).hasSubSequence(Stream(2, 3, 5)))
+    println()
+
+    println("scanRight: " + Stream(1,2,3).scanRight(0)(_ + _).toList)
     println()
   }
 }
