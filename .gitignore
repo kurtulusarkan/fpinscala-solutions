@@ -2,4 +2,5 @@ out/*
 target/*
 project/target/*
 .DS_Store
+.idea
 
