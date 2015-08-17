@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/fpinscala-solutions.iml" filepath="$PROJECT_DIR$/.idea/fpinscala-solutions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fpinscala-solutions.iml" filepath="$PROJECT_DIR$/.idea/modules/fpinscala-solutions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fpinscala-solutions-build.iml" filepath="$PROJECT_DIR$/.idea/modules/fpinscala-solutions-build.iml" />
     </modules>
   </component>
 </project>
