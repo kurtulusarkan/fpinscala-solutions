@@ -208,7 +208,7 @@ object Stream {
 
   def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = {
 
-    // modified see evaluation of head's and tail's
+    // modified to see evaluation of head's and tail's
     lazy val head = {
       lazy val h = hd
       println("_head:" + h)
